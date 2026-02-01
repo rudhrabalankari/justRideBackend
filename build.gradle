@@ -1,0 +1,55 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '4.0.1'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.car.rental'
+version = '0.0.1-SNAPSHOT'
+description = 'justride'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencyManagement {
+	imports {
+		// The AWS Bill of Materials (BOM) manages versions
+		mavenBom 'software.amazon.awssdk:bom:2.23.12' // Use a recent version
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	//implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
+	//swagger
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
+	//lombok
+	compileOnly("org.projectlombok:lombok:1.18.30")
+	annotationProcessor("org.projectlombok:lombok:1.18.30")
+
+	//developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+	implementation 'software.amazon.awssdk:dynamodb'
+	implementation 'software.amazon.awssdk:dynamodb-enhanced'
+	//testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
+	//testImplementation 'org.springframework.boot:spring-boot-starter-amqp-test'
+	//testImplementation 'org.springframework.boot:spring-boot-starter-flyway-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+	// Specifically for WebMvc support if not transitively included
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
