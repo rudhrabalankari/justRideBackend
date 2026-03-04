@@ -5,6 +5,8 @@ export AWS_SECRET_ACCESS_KEY=awsSecretKey
 export AWS_DEFAULT_REGION=us-east-1
 ENDPOINT_URL="${ENDPOINT_URL:-http://localhost:8000}"
 
+#docker container start my-dynamodb
+
 aws dynamodb create-table \
     --table-name Car \
     --attribute-definitions \
