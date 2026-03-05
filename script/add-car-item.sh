@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # Export credentials to match the table creation script
-export AWS_ACCESS_KEY_ID=awsAccessKey
-export AWS_SECRET_ACCESS_KEY=awsSecretKey
 export AWS_DEFAULT_REGION=us-east-1
 
 # Generate a unique ID
