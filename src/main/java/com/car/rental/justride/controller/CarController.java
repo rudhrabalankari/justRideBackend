@@ -5,54 +5,57 @@ import com.car.rental.justride.model.Car;
 import com.car.rental.justride.model.response.CarResponse;
 import com.car.rental.justride.model.response.CarsResponse;
 import com.car.rental.justride.service.CarService;
-import com.car.rental.justride.service.DynamoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/cars")
 @Tag(name = "CarController", description = "Car Controller for JustRide Application")
 public class CarController {
-
-    @Autowired
-    private DynamoService dynamoService;
 
     @Autowired
     private CarService carService;
 
     @Operation(summary = "Get all cars", description = "Fetches all cars available in the DynamoDB table")
-    @GetMapping("/cars")
+    @GetMapping
     public ResponseEntity<CarsResponse> getCars() {
-        CarsResponse allCars = dynamoService.getAllCars();
+        CarsResponse allCars = carService.getAllCars();
         return new ResponseEntity<>(allCars, HttpStatus.OK);
     }
 
-    @GetMapping("/cars/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CarResponse> getCarById(@PathVariable String id) throws CarNotFoundException {
-
-        CarResponse car = dynamoService.getCarById(id);
+        CarResponse car = carService.getCarById(id);
         if (car == null) {
             throw new CarNotFoundException("Car with id " + id + " not found");
         }
         return ResponseEntity.ok(car);
     }
 
-    @PostMapping("/car")
-    public String addCar(Car car) {
-        return dynamoService.addCar(car);
+    @PostMapping
+    public ResponseEntity<CarResponse> addCar(@RequestBody Car car) {
+        return new ResponseEntity<>(carService.addCar(car), HttpStatus.CREATED);
     }
 
-    @GetMapping("/models")
+    @PutMapping("/{id}")
+    public ResponseEntity<CarResponse> updateCar(@PathVariable String id, @RequestBody Car car) {
+        return new ResponseEntity<>(carService.updateCar(id, car), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCar(@PathVariable String id) {
+        carService.deleteCar(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/body-types")
     public List<String> getAllBodyTypes() {
         return carService.getAllBodyTypes();
     }
-
 }

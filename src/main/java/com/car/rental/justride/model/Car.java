@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
 @DynamoDbBean
 @AllArgsConstructor
@@ -15,6 +17,9 @@ public class Car {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Setter
     private String id;
+
+    @Setter
+    private String type = "CAR";
 
     @Getter
     @Setter
@@ -40,13 +45,15 @@ public class Car {
     @Setter
     private String description;
 
-
-
     @DynamoDbPartitionKey
+    @DynamoDbAttribute("PK")
     public String getId() {
         return id;
     }
 
-
+    @DynamoDbSortKey
+    @DynamoDbAttribute("SK")
+    public String getType() {
+        return type;
+    }
 }
-

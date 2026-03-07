@@ -1,16 +1,13 @@
-// java
 package com.car.rental.justride.controller;
 
 import com.car.rental.justride.model.Car;
 import com.car.rental.justride.model.response.CarsResponse;
 import com.car.rental.justride.service.CarService;
-import com.car.rental.justride.service.DynamoService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -19,7 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 @WebMvcTest(CarController.class)
 public class CarControllerTest {
@@ -31,15 +27,7 @@ public class CarControllerTest {
     private CarController carController;
 
     @MockitoBean
-    private DynamoService dynamoService;
-
-    @MockitoBean
     private CarService carService;
-
-    @MockitoBean
-    private ObjectMapper objectMapper;
-
-
 
     @Test
     void contextLoads_controllerPresent() {
@@ -53,7 +41,7 @@ public class CarControllerTest {
         car.setMake("Toyota");
         car.setModel("Corolla");
 
-        when(dynamoService.getAllCars()).thenReturn(new CarsResponse(List.of(car)));
+        when(carService.getAllCars()).thenReturn(new CarsResponse(List.of(car)));
 
         mockMvc.perform(get("/cars")
                         .accept(MediaType.APPLICATION_JSON))
